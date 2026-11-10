@@ -1,0 +1,57 @@
+# Bot.py - shiny-system by deezy-rice
+# A simple chatbot with commands, memory and learning
+
+import random
+import datetime
+
+class ShinyBot:
+    def __init__(self, name="Shiny"):
+        self.name = name
+        self.history = []
+        self.jokes = [
+            "Why did the developer go broke? Because he used up all his cache!",
+            "Why do programmers prefer dark mode? Because light attracts bugs!",
+            "What is a programmer's favourite hangout? The Foo Bar!",
+        ]
+        self.keywords = {
+            "hello": ["Hey! Welki! 👋", "Sasa! How are you?", "Hello bro, what's up?"],
+            "how are you": ["I'm good, just running on code. You?", "I'm chilling, you?"],
+            "codm": ["CODM? Let's go! What's your rank?", "Call of Duty Mobile is fire. Drop your loadout!"],
+            "free fire": ["Free Fire gang! Booyah!"],
+            "bye": ["Bye bye, see you later!", "Later bro, take care!"],
+            "help": ["Try: hello, joke, time, codm, help, bye"],
+        }
+
+    def get_time(self):
+        now = datetime.datetime.now()
+        return f"It's {now.strftime('%H:%M')} right now."
+
+    def reply(self, message):
+        message = message.lower().strip()
+        self.history.append(message)
+
+        if message == "joke":
+            return random.choice(self.jokes)
+        if message == "time":
+            return self.get_time()
+        if message == "history":
+            return f"You have said {len(self.history)} things: {', '.join(self.history[-5:])}"
+
+        for key, replies in self.keywords.items():
+            if key in message:
+                return random.choice(replies)
+
+        return "Hmm, I didn't get that. Type 'help' to see what I know."
+
+    def run(self):
+        print(f"{self.name} Bot started. Type 'bye' to exit.")
+        while True:
+            user_input = input("You: ")
+            answer = self.reply(user_input)
+            print(f"{self.name}: {answer}")
+            if "bye" in user_input.lower():
+                break
+
+if __name__ == "__main__":
+    bot = ShinyBot()
+    bot.run()
